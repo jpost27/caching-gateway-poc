@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "cache",
+      "type": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig",
+      "sourceType": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "cache.caches",
+      "type": "java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.String>>",
+      "sourceType": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig"
+    },
+    {
+      "name": "cache.map",
+      "type": "java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.String>>",
+      "sourceType": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig"
+    }
+  ],
+  "hints": []
+}

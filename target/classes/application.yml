@@ -1,0 +1,30 @@
+
+server:
+  port: 8099
+
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  cache:
+    type: ${SPRING_CACHE_TYPE:redis}
+    maxValues: ${SPRING_CACHE_MAX_VALUES:1}
+  #    name: ${SPRING_CACHE_NAME:standings}
+  redis:
+    enabled: ${SPRING_REDIS_ENABLED:true}
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: ${SPRING_REDIS_PORT:6379}
+    teamCacheTimeout: ${SPRING_REDIS_TIMEOUT_SECONDS:3600}
+    connectionReadTimeout: ${SPRING_REDIS_CLIENT_CONNECTION_READ_TIMEOUT:10}
+    connectionTimeout: ${SPRING_REDIS_CONNECTION_TIMEOUT:10}
+
+
+cache:
+  initialized:
+    onStartUp:
+      enabled: false
+  default:
+    ttl: 3600
+  map:
+    swapi:
+      ttl: ${TEAMS_CACHE_TTL:604800}
+      maxValues: 1
