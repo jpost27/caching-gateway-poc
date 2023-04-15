@@ -38,7 +38,23 @@ public class ExampleRest {
             "ncaawb", "ybyrqvrb7earbth93thgkm6f",
             "nhl", "5hbgwfmkf3bffvn2kmvksraz",
             "wnba", "wfmcbu8th44xzun9ms56v43n"
-            );
+    );
+
+    private final Map<String, String> apiBasePaths = Map.of(
+            "nfl", "nujy5je6td2ucj2zjrpwwh98",
+            "nba", "2hy55br4nryzd444yv7fj9kn",
+            "mlb", "yfvwkdgaqu7xgdxtfjbrqtmk",
+            "ncaamb", "cu69he2wrngtgjvdaam7nnyn",
+            "ncaafb", "5av9mpnhbhrs6sqqbbpfmgvq",
+            "ncaawb", "ybyrqvrb7earbth93thgkm6f",
+            "nhl", "5hbgwfmkf3bffvn2kmvksraz",
+            "wnba", "wfmcbu8th44xzun9ms56v43n"
+    );
+
+    @GetMapping("favicon.ico")
+    private ResponseEntity<Void> favicon() {
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping(path = {
             "/{path1}",
@@ -99,6 +115,7 @@ public class ExampleRest {
         } else {
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         }
+        params.remove("api_key");
         return new ResponseEntity<>(
                 sportRadarClient.fetchAndCache(buildUri(path, params, league)),
                 headers,
