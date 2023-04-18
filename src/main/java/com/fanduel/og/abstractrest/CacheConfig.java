@@ -116,14 +116,10 @@ public class CacheConfig extends CachingConfigurerSupport {
         for (Map.Entry<String, Class<?>> entry : cacheKeyList.entrySet()) {
             Map<String, String> cacheConfig = cacheDetailsConfig.getCaches().get(entry.getKey());
             if (cacheConfig == null) {
-//                throw new RuntimeException(
-//                        "Error creating cache with name "
-//                                + entry.getKey()
-//                                + " - have you defined this cache in yaml?");
                 mapCaches.add(
                         createMapCache(
                                 entry.getKey(),
-                                3600L,
+                                (long) (60 * 60 * 24 * 7), // 7 days
                                 100L,
                                 entry.getValue()));
             } else {
