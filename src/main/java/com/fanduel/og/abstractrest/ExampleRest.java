@@ -3,6 +3,7 @@ package com.fanduel.og.abstractrest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.bson.Document;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,17 +41,6 @@ public class ExampleRest {
             "wnba", "wfmcbu8th44xzun9ms56v43n"
     );
 
-    private final Map<String, String> apiBasePaths = Map.of(
-            "nfl", "nujy5je6td2ucj2zjrpwwh98",
-            "nba", "2hy55br4nryzd444yv7fj9kn",
-            "mlb", "yfvwkdgaqu7xgdxtfjbrqtmk",
-            "ncaamb", "cu69he2wrngtgjvdaam7nnyn",
-            "ncaafb", "5av9mpnhbhrs6sqqbbpfmgvq",
-            "ncaawb", "ybyrqvrb7earbth93thgkm6f",
-            "nhl", "5hbgwfmkf3bffvn2kmvksraz",
-            "wnba", "wfmcbu8th44xzun9ms56v43n"
-    );
-
     @GetMapping("favicon.ico")
     private ResponseEntity<Void> favicon() {
         return ResponseEntity.ok().build();
@@ -70,7 +60,7 @@ public class ExampleRest {
             "/{path1}/{path2}/{path3}/{path4}/{path5}/{path6}/{path7}/{path8}/{path9}/{path10}/{path11}",
             "/{path1}/{path2}/{path3}/{path4}/{path5}/{path6}/{path7}/{path8}/{path9}/{path10}/{path11}/{path12}"},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<byte[]> get(
+    public ResponseEntity<Object> get(
             @PathVariable("path1") String path1,
             @PathVariable("path2") Optional<String> path2,
             @PathVariable("path3") Optional<String> path3,
@@ -91,24 +81,31 @@ public class ExampleRest {
         } else if (path2.isPresent() && (league = parseLeague(path2.get())) != null) {
             path2 = Optional.of(path2.get().toLowerCase());
         }
-        if (league == null) {
-            throw new IllegalArgumentException("league not supported");
-        }
         List<String> paths = Stream.of(
-                        Optional.of(path1),
-                        path2,
-                        path3,
-                        path4,
-                        path5,
-                        path6,
-                        path7,
-                        path8,
-                        path9,
-                        path10,
-                        path11,
-                        path12
-                ).flatMap(Optional::stream).collect(Collectors.toList());
+                Optional.of(path1),
+                path2,
+                path3,
+                path4,
+                path5,
+                path6,
+                path7,
+                path8,
+                path9,
+                path10,
+                path11,
+                path12
+        ).flatMap(Optional::stream).collect(Collectors.toList());
         String path = Strings.join(paths, '/');
+        if (league == null) {
+            return new ResponseEntity<>(
+                    sportRadarClient.fetchAndCache(
+                            UriComponentsBuilder.fromUriString("http://api.sportradar.us")
+                                    .path(path)
+                                    .queryParams(params)
+                                    .toUriString()),
+                    HttpStatus.OK
+            );
+        }
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         if (paths.get(paths.size() - 1).endsWith(".xml")) {
             headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE);

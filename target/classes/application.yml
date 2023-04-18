@@ -3,6 +3,10 @@ server:
   port: 8099
 
 spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://joshuapost:lZCq2MRsreM25NAt@cluster0.msnzvjl.mongodb.net/?retryWrites=true&w=majority
+      database: POC
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
   cache:
