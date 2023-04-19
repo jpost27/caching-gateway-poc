@@ -1,5 +1,6 @@
 package com.fanduel.og.abstractrest;
 
+import com.fanduel.og.abstractrest.aspect.MonoCache;
 import com.fanduel.og.abstractrest.mongo.MongoCacheWrapper;
 import com.fanduel.og.abstractrest.mongo.MongoCacheWrapperRepo;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.bson.json.JsonParseException;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.text.ParseException;
@@ -23,30 +25,15 @@ public class SportRadarClient {
     private final MongoCacheWrapperRepo mongoCacheWrapperRepo;
     private static final String KEY = "swapi";
 
-    @Cacheable(value = KEY, sync = true)
-    public Object fetchAndCache(String uri) {
-        if (Boolean.TRUE.equals(mongoCacheWrapperRepo.existsById(uri).block())) {
-            log.info("Retrieving request from L2 (Mongo) cache");
-            return mongoCacheWrapperRepo.findById(uri).block().getData();
-        }
+//    @Cacheable(value = KEY, sync = true)
+    @MonoCache
+    public Mono<Object> fetchAndCache(String uri) {
+//        if (Boolean.TRUE.equals(mongoCacheWrapperRepo.existsById(uri).block())) {
+//            log.info("Retrieving request from L2 (Mongo) cache");
+//            return mongoCacheWrapperRepo.findById(uri).map(MongoCacheWrapper::getData);
+//        }
         log.info("Fetching {}", uri);
         String responseString = webClient.getForObject(URI.create(uri), String.class);
-
-        if (responseString != null) {
-            CompletableFuture.runAsync(() -> {
-                log.info("Saving request to L2 (Mongo) cache");
-                Object res;
-                try {
-                    res = Document.parse(responseString);
-                } catch (JsonParseException e) {
-                    res = responseString;
-                }
-                mongoCacheWrapperRepo.save(new MongoCacheWrapper(
-                        uri,
-                        res
-                )).block();
-            });
-        }
-        return responseString;
+        return Mono.just(responseString);
     }
 }

@@ -102,7 +102,7 @@ public class ExampleRest {
                             UriComponentsBuilder.fromUriString("http://api.sportradar.us")
                                     .path(path)
                                     .queryParams(params)
-                                    .toUriString()),
+                                    .toUriString()).block(),
                     HttpStatus.OK
             );
         }
@@ -114,7 +114,7 @@ public class ExampleRest {
         }
         params.remove("api_key");
         return new ResponseEntity<>(
-                sportRadarClient.fetchAndCache(buildUri(path, params, league)),
+                sportRadarClient.fetchAndCache(buildUri(path, params, league)).block(),
                 headers,
                 HttpStatus.OK
         );
