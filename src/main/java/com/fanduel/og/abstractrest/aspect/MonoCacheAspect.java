@@ -43,13 +43,12 @@ public class MonoCacheAspect {
     @Around(value = "cacheMono()")
     public Mono<?> aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         System.out.println("In Around Aspect");
-        Mono<?> res = null;
-        if ((res = getFromL1Cache()) != null) {
-            return res;
-        } else if ((res = getFromL2Cache()) != null) {
-            return res;
+        Mono<?> returnMono = null;
+        if ((returnMono = getFromL1Cache()) != null) {
+            return returnMono;
+        } else if ((returnMono = getFromL2Cache()) != null) {
+            return returnMono;
         }
-        Mono<?> returnMono;
         try {
             returnMono = (Mono<?>) joinPoint.proceed();
         } catch (ClassCastException e) {

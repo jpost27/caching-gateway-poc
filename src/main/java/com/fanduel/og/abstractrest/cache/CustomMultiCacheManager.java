@@ -1,28 +1,23 @@
 package com.fanduel.og.abstractrest.cache;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 
 @Slf4j
-public class CustomRedisCacheManager implements CacheManager {
+@RequiredArgsConstructor
+@Component
+public class CustomMultiCacheManager implements CacheManager {
 
-    protected RedisAliveAware connectionAliveAware;
-
-    private CacheManager redisCacheManager;
-
-    private CacheManager basicCacheManager;
-
-    public CustomRedisCacheManager(
-            RedisAliveAware connectionAliveAware,
-            CacheManager redisCacheManager,
-            CacheManager basicCacheManager) {
-        this.connectionAliveAware = connectionAliveAware;
-        this.redisCacheManager = redisCacheManager;
-        this.basicCacheManager = basicCacheManager;
-    }
+    private final RedisHealthChecker connectionAliveAware;
+    private final RedisCacheManager redisCacheManager;
+    private final SimpleCacheManager basicCacheManager;
 
     @Override
     public Cache getCache(String name) {
@@ -42,9 +37,5 @@ public class CustomRedisCacheManager implements CacheManager {
             return basicCacheManager.getCacheNames();
         }
         return redisCacheManager.getCacheNames();
-    }
-
-    public void setConnectionAliveAware(RedisAliveAware connectionAliveAware) {
-        this.connectionAliveAware = connectionAliveAware;
     }
 }

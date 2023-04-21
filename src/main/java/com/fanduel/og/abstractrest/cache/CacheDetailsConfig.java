@@ -15,9 +15,15 @@ import java.util.Map;
 @NoArgsConstructor
 public class CacheDetailsConfig {
 
-    private Map<String, Map<String, String>> map;
+    private Map<String, CacheDetails> map;
 
-    public Map<String, Map<String, String>> getCaches() {
-        return this.map;
+    public CacheDetails get(CacheKey key) {
+        return map.get(key.name());
+    }
+
+    @Data
+    public static class CacheDetails {
+        private Long ttl;
+        private Integer maxValues;
     }
 }

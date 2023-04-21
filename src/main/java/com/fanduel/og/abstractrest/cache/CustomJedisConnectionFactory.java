@@ -21,7 +21,7 @@ public class CustomJedisConnectionFactory extends JedisConnectionFactory {
         super(redisStandaloneConfiguration, redisClientConfiguration);
     }
 
-    // Note: can be used to help with with retry logic
+    // Note: can be used to help with retry logic
     @Override
     protected Jedis fetchJedisConnector() {
         return super.fetchJedisConnector();

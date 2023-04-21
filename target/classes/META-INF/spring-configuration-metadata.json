@@ -8,13 +8,8 @@
   ],
   "properties": [
     {
-      "name": "cache.caches",
-      "type": "java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.String>>",
-      "sourceType": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig"
-    },
-    {
       "name": "cache.map",
-      "type": "java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.String>>",
+      "type": "java.util.Map<java.lang.String,com.fanduel.og.abstractrest.cache.CacheDetailsConfig$CacheDetails>",
       "sourceType": "com.fanduel.og.abstractrest.cache.CacheDetailsConfig"
     }
   ],

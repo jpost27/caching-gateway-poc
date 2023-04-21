@@ -13,13 +13,13 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Component
 @EnableScheduling
-public class RedisConnectionChecker implements RedisAliveAware {
+public class RedisHealthChecker {
 
     private boolean isAlive = false;
 
     private RedisConnectionFactory connectionFactory;
 
-    public RedisConnectionChecker(RedisConnectionFactory connectionFactory) {
+    public RedisHealthChecker(RedisConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
@@ -40,10 +40,5 @@ public class RedisConnectionChecker implements RedisAliveAware {
 
     public boolean isAlive() {
         return isAlive;
-    }
-
-    @Override
-    public void setConnectionFactory(RedisConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
     }
 }
